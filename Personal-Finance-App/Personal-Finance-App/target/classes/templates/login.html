@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login - FinanceTracker Pro</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="logo">FinanceTracker Pro</div>
+            <ul class="nav-links">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a href="#features">Features</a></li>
+            </ul>
+            <a th:href="@{/register}" class="cta-nav">Register</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Master Your Money, Secure Your Future</h1>
+                <p>The complete personal finance management system designed for everyone - from students to
+                    professionals, individuals to families.</p>
+                <div class="hero-buttons">
+                    <a href="#signup" class="btn-primary">Start Free Trial</a>
+                    <a href="#demo" class="btn-secondary">Watch Demo</a>
+                </div>
+            </div>
+            <div class="hero-content" style="display: flex; justify-content: center;">
+                <div class="dashboard-preview" style="width: 400px;">
+                    <h2 style="text-align: center;">Login to Your Account</h2>
+
+                    <form th:action="@{/login}" method="post" style="display: flex; flex-direction: column; gap: 15px;">
+                        <input type="text" name="username" placeholder="Email" required class="btn-primary">
+                        <input type="password" name="password" placeholder="Password" required class="btn-primary">
+                        <button type="submit" class="btn-primary">Login</button>
+
+                        <!-- Show login error -->
+                        <p th:if="${param.error}" style="text-align: center; color: red;">Invalid email or password</p>
+                        <p th:if="${param.logout}" style="text-align: center; color: green;">You have been logged out
+                        </p>
+
+                        <p style="text-align: center; margin-top: 10px;">Don't have an account? <a
+                                th:href="@{/register}">Register</a></p>
+                    </form>
+                </div>
+            </div>
+    </section>
+    <!-- <section class="hero" style="min-height: 100vh;">
+        <div class="hero-content" style="display: flex; justify-content: center;">
+            <div class="dashboard-preview" style="width: 400px;">
+                <h2 style="text-align: center;">Login to Your Account</h2>
+
+                <form th:action="@{/login}" method="post" style="display: flex; flex-direction: column; gap: 15px;">
+                    <input type="text" name="username" placeholder="Email" required class="btn-primary">
+                    <input type="password" name="password" placeholder="Password" required class="btn-primary">
+                    <button type="submit" class="btn-primary">Login</button>
+
+                    <!-- Show login error -->
+                    <p th:if="${param.error}" style="text-align: center; color: red;">Invalid email or password</p>
+                    <p th:if="${param.logout}" style="text-align: center; color: green;">You have been logged out</p>
+
+                    <p style="text-align: center; margin-top: 10px;">Don't have an account? <a
+                            th:href="@{/register}">Register</a></p>
+                </form>
+            </div>
+        </div>
+    </section> -->
+</body>
+
+</html>

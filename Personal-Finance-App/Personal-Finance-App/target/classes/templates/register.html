@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register - FinanceTracker Pro</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="logo">FinanceTracker Pro</div>
+            <ul class="nav-links">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a href="#features">Features</a></li>
+            </ul>
+            <a th:href="@{/login}" class="cta-nav">Login</a>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Master Your Money, Secure Your Future</h1>
+                <p>The complete personal finance management system designed for everyone - from students to
+                    professionals, individuals to families.</p>
+                <div class="hero-buttons">
+                    <a href="#signup" class="btn-primary">Start Free Trial</a>
+                    <a href="#demo" class="btn-secondary">Watch Demo</a>
+                </div>
+            </div>
+            <div class="hero-content" style="display: flex; justify-content: center;">
+                <div class="dashboard-preview" style="width: 450px;">
+                    <h2 style="text-align: center;">Create a New Account</h2>
+                    <form th:action="@{/register}" method="post" th:object="${user}"
+                        style="display: flex; flex-direction: column; gap: 15px;">
+                        <input type="text" th:field="*{fullName}" placeholder="Full Name" required class="btn-primary">
+                        <input type="email" th:field="*{email}" placeholder="Email" required class="btn-primary">
+                        <input type="password" th:field="*{password}" placeholder="Password" required
+                            class="btn-primary">
+                        <select th:field="*{role}" class="btn-primary">
+                            <option value="USER">User</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
+                        <button type="submit" class="btn-primary">Register</button>
+                        <p style="text-align: center; margin-top: 10px;">Already have an account? <a
+                                th:href="@{/login}">Login</a></p>
+                    </form>
+                </div>
+            </div>
+            <!-- SUCCESS MESSAGE -->
+            <div th:if="${successMessage}" class="alert alert-success" style="text-align:center; margin-bottom: 15px;">
+                <p th:text="${successMessage}"></p>
+            </div>
+    </section>
+    <!-- <section class="hero" style="min-height: 100vh;">
+        <div class="hero-content" style="display: flex; justify-content: center;">
+            <div class="dashboard-preview" style="width: 450px;">
+                <h2 style="text-align: center;">Create a New Account</h2>
+                <form th:action="@{/register}" method="post" th:object="${user}"
+                    style="display: flex; flex-direction: column; gap: 15px;">
+                    <input type="text" th:field="*{fullName}" placeholder="Full Name" required class="btn-primary">
+                    <input type="email" th:field="*{email}" placeholder="Email" required class="btn-primary">
+                    <input type="password" th:field="*{password}" placeholder="Password" required class="btn-primary">
+                    <select th:field="*{role}" class="btn-primary">
+                        <option value="USER">User</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
+                    <button type="submit" class="btn-primary">Register</button>
+                    <p style="text-align: center; margin-top: 10px;">Already have an account? <a
+                            th:href="@{/login}">Login</a></p>
+                </form>
+            </div>
+        </div>
+        <!-- SUCCESS MESSAGE -->
+    <!-- <div th:if="${successMessage}" class="alert alert-success" style="text-align:center; margin-bottom: 15px;">
+        <p th:text="${successMessage}"></p>
+    </div>
+    </section> --> 
+</body>
+
+</html>

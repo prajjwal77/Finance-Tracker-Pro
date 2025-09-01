@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceTracker Pro - Smart Personal Finance Management</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+   
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="logo">FinanceTracker Pro</div>
+            <ul class="nav-links">
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#users">For You</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a th:href="@{/logout}" class="cta-nav">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Master Your Money, Secure Your Future</h1>
+                <p>The complete personal finance management system designed for everyone - from students to professionals, individuals to families.</p>
+                <div class="hero-buttons">
+                    <a href="#signup" class="btn-primary">Start Free Trial</a>
+                    <a href="#demo" class="btn-secondary">Watch Demo</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <h4 style="margin-bottom: 20px; color: #333;">Live Dashboard Preview</h4>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold;">₹8,50,000</div>
+                            <div style="font-size: 0.9rem;">Total Balance</div>
+                        </div>
+                        <div style="background: #007bff; color: white; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold;">₹1,25,000</div>
+                            <div style="font-size: 0.9rem;">Monthly Savings</div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="heroChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Types Section -->
+    <section class="user-types" id="users">
+        <div class="container">
+            <h2 class="section-title">Built for Everyone</h2>
+            <p class="section-subtitle">Whether you're a student, professional, family, or business owner, we have tailored solutions for your unique financial needs.</p>
+            
+            <div class="user-grid">
+                <div class="user-card">
+                    <div class="user-icon">🎓</div>
+                    <h3>Students</h3>
+                    <p>Start your financial journey right. Learn budgeting, track expenses, and build healthy money habits.</p>
+                    <ul class="features-list">
+                        <li>Simple expense tracking</li>
+                        <li>Budget planning tools</li>
+                        <li>Savings goals</li>
+                        <li>Financial education resources</li>
+                        <li>Free basic plan</li>
+                    </ul>
+                    <a href="#" class="btn-primary">Perfect for Students</a>
+                </div>
+
+                <div class="user-card">
+                    <div class="user-icon">💼</div>
+                    <h3>Young Professionals</h3>
+                    <p>Manage your growing income, plan investments, and achieve your career financial goals.</p>
+                    <ul class="features-list">
+                        <li>Income & expense analysis</li>
+                        <li>Investment tracking</li>
+                        <li>Tax planning</li>
+                        <li>Career milestone goals</li>
+                        <li>EMI & loan management</li>
+                    </ul>
+                    <a href="#" class="btn-primary">Boost Your Career</a>
+                </div>
+
+                <div class="user-card">
+                    <div class="user-icon">👨‍👩‍👧‍👦</div>
+                    <h3>Families</h3>
+                    <p>Coordinate household finances, plan for children's future, and secure your family's financial well-being.</p>
+                    <ul class="features-list">
+                        <li>Joint account management</li>
+                        <li>Family budget planning</li>
+                        <li>Children's education fund</li>
+                        <li>Insurance tracking</li>
+                        <li>Emergency fund planning</li>
+                    </ul>
+                    <a href="#" class="btn-primary">Secure Your Family</a>
+                </div>
+
+                <div class="user-card">
+                    <div class="user-icon">🏆</div>
+                    <h3>High Earners</h3>
+                    <p>Optimize wealth management, minimize taxes, and maximize investment returns.</p>
+                    <ul class="features-list">
+                        <li>Advanced portfolio analysis</li>
+                        <li>Tax optimization strategies</li>
+                        <li>Multiple income streams</li>
+                        <li>Wealth preservation tools</li>
+                        <li>Premium advisory services</li>
+                    </ul>
+                    <a href="#" class="btn-primary">Maximize Wealth</a>
+                </div>
+
+                <div class="user-card">
+                    <div class="user-icon">👴</div>
+                    <h3>Retirees</h3>
+                    <p>Manage retirement funds, track medical expenses, and ensure a comfortable golden age.</p>
+                    <ul class="features-list">
+                        <li>Pension tracking</li>
+                        <li>Healthcare expense management</li>
+                        <li>Fixed income planning</li>
+                        <li>Legacy planning tools</li>
+                        <li>Simple, senior-friendly interface</li>
+                    </ul>
+                    <a href="#" class="btn-primary">Enjoy Retirement</a>
+                </div>
+
+                <div class="user-card">
+                    <div class="user-icon">🏢</div>
+                    <h3>Small Business</h3>
+                    <p>Separate personal and business finances, track cash flow, and manage business expenses.</p>
+                    <ul class="features-list">
+                        <li>Business expense categorization</li>
+                        <li>Cash flow forecasting</li>
+                        <li>Tax preparation support</li>
+                        <li>Invoice and payment tracking</li>
+                        <li>Financial reporting</li>
+                    </ul>
+                    <a href="#" class="btn-primary">Grow Your Business</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Powerful Features for Everyone</h2>
+            <p class="section-subtitle">Comprehensive tools that adapt to your financial complexity and grow with your needs.</p>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <h4>Smart Analytics</h4>
+                    <p>AI-powered insights and personalized recommendations based on your spending patterns.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <h4>Bank-Level Security</h4>
+                    <p>256-bit encryption and multi-factor authentication to keep your financial data safe.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <h4>Multi-Platform Access</h4>
+                    <p>Web, mobile, and desktop apps that sync seamlessly across all your devices.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🏦</div>
+                    <h4>Bank Integration</h4>
+                    <p>Connect with 500+ banks and financial institutions for automatic transaction import.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <h4>Goal Tracking</h4>
+                    <p>Set and track financial goals with intelligent milestone planning and progress monitoring.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">📈</div>
+                    <h4>Investment Tracking</h4>
+                    <p>Monitor stocks, mutual funds, and other investments with real-time market data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2 class="section-title">Choose Your Plan</h2>
+            <p class="section-subtitle">Flexible pricing options designed to fit every budget and requirement.</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 class="plan-name">Basic</h3>
+                    <div class="plan-price">Free</div>
+                    <ul class="plan-features">
+                        <li>Up to 3 bank accounts</li>
+                        <li>Basic expense tracking</li>
+                        <li>Simple budgeting</li>
+                        <li>Mobile app access</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="#" class="btn-primary">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <h3 class="plan-name">Premium</h3>
+                    <div class="plan-price">₹499<span>/month</span></div>
+                    <ul class="plan-features">
+                        <li>Unlimited bank accounts</li>
+                        <li>Advanced analytics</li>
+                        <li>Investment tracking</li>
+                        <li>Goal planning</li>
+                        <li>Priority support</li>
+                        <li>Tax optimization</li>
+                    </ul>
+                    <a href="#" class="btn-primary">Start Free Trial</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3 class="plan-name">Family</h3>
+                    <div class="plan-price">₹799<span>/month</span></div>
+                    <ul class="plan-features">
+                        <li>Up to 5 family members</li>
+                        <li>Shared budgets & goals</li>
+                        <li>Children's accounts</li>
+                        <li>Family financial planning</li>
+                        <li>Premium features</li>
+                        <li>Dedicated advisor</li>
+                    </ul>
+                    <a href="#" class="btn-primary">Perfect for Families</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Take Control of Your Finances?</h2>
+            <p>Join over 100,000 users who have transformed their financial lives with FinanceTracker Pro</p>
+            <div class="hero-buttons">
+                <a href="#signup" class="btn-primary">Start Your Free Trial</a>
+                <a href="#contact" class="btn-secondary">Talk to an Expert</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Integrations</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Partners</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 FinanceTracker Pro. All rights reserved. Made with ❤️ for financial freedom.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Hero Chart
+        const heroCtx = document.getElementById('heroChart').getContext('2d');
+        new Chart(heroCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Savings Growth',
+                    data: [50000, 75000, 85000, 120000, 140000, 165000],
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        display: false,
+                        beginAtZero: true
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 4,
+                        hoverRadius: 8
+                    }
+                }
+            }
+        });
+
+       

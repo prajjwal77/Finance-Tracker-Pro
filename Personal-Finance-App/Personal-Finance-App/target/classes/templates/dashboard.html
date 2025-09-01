@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceTracker Pro - Personal Finance Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/dashboardnav.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <script th:inline="javascript">
+        let monthlyIncome = /*[[${monthlyIncome}]]*/ {};
+        let monthlyExpenses = /*[[${monthlyExpenses}]]*/ {};
+        let monthlySavings = /*[[${monthlySavings}]]*/ {};
+        let categoryTotals = /*[[${categoryTotals}]]*/ {};
+    </script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <section>
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="logo">FinanceTracker Pro</div>
+                <ul class="nav-links">
+                    <li><a href="/newHome">Home</a></li>
+                    <li><a href="/analysis">Features</a></li>
+                    <li><a href="#users">For You</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <a th:href="@{/transactions/income/add}" class="cta-nav">Add Income</a>
+                <a th:href="@{/transactions/expense/add}" class="cta-nav">Add Expense</a>
+                <a th:href="@{/logout}" class="cta-nav">Logout</a>
+            </div>
+        </nav>
+    </section>
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="nav-buttons">
+        <button class="nav-btn">Transactions</button>
+        <button class="nav-btn">Budgets</button>
+        <button class="nav-btn">Goals</button>
+        <button class="nav-btn">Reports</button>
+        <button class="nav-btn">Settings</button>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value positive">₹<span th:text="${balance}">0.00</span></div>
+            <div class="stat-label">Total Balance</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value positive">₹<span th:text="${totalIncome}">0.00</span></div>
+            <div class="stat-label">Monthly Income</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value negative">₹<span th:text="${totalExpense}">0.00</span></div>
+            <div class="stat-label">Monthly Expenses</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value positive">₹<span th:text="${savings}">0.00</span></div>
+            <div class="stat-label">Monthly Savings</div>
+        </div>
+    </div>
+
+
+    <div class="charts-grid">
+        <div class="chart-container">
+            <h3 class="chart-title">Monthly Cash Flow</h3>
+            <div class="canvas-container">
+                <canvas id="cashFlowChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Expense Categories</h3>
+            <div class="canvas-container">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        </div>
+
+        <!-- <div class="chart-container">
+            <h3 class="chart-title">Budget vs Actual</h3>
+            <div class="canvas-container">
+                <canvas id="budgetChart"></canvas>
+            </div>
+        </div> -->
+
+        <div class="chart-container">
+            <h3 class="chart-title">Savings Growth</h3>
+            <div class="canvas-container">
+                <canvas id="savingsChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="transactions-section">
+        <h3 class="chart-title">Recent Transactions</h3>
+        <table class="transactions-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="transaction : ${transactions}">
+                    <td th:text="${transaction.date}">01-Aug-2025</td>
+                    <td th:text="${transaction.description}">Job</td>
+                    <td th:text="${transaction.category}">Salary</td>
+                    <td th:text="'₹' + ${#numbers.formatDecimal(transaction.amount, 0, 2)}"
+                        th:classappend="${transaction.type == 'INCOME'} ? 'transaction-amount income' : 'transaction-amount expense'">
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    </div>
+    <!-- Chatbot Button -->
+    <div id="chatbot-btn">💬</div>
+
+    <!-- Chatbot Window -->
+    <div id="chatbot-window">
+        <div id="chatbot-header">AI Assistant</div>
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-input-container">
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+
+
+    <script>
+        // Chart.js configuration
+        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+        Chart.defaults.color = '#666';
+
+        // Cash Flow Chart
+        const cashFlowCtx = document.getElementById('cashFlowChart').getContext('2d');
+        new Chart(cashFlowCtx, {
+            type: 'line',
+            data: {
+                labels: Object.keys(monthlyIncome),
+                datasets: [
+                    {
+                        label: 'Income',
+                        data: Object.values(monthlyIncome),
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Expenses',
+                        data: Object.values(monthlyExpenses),
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        tension: 0.4
+                    }
+                ]
+            }
+        });
+
+        // Expense Categories Chart
+        const expenseCtx = document.getElementById('expenseChart').getContext('2d');
+
+        new Chart(expenseCtx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(categoryTotals),
+                datasets: [{
+                    data: Object.values(categoryTotals),
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#6f42c1',
+                        '#00bcd4', '#8bc34a', '#e91e63', '#9e9e9e'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#333',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const value = context.parsed;
+                                const label = context.label || '';
+                                return `${label}: ₹${value.toLocaleString()}`;
+                            }
+                        }
+                    }
+                },
+                cutout: '65%' // Adjusts donut thickness
+            }
+        });
+
+        const btn = document.getElementById("chatbot-btn");
+        const windowBox = document.getElementById("chatbot-window");
+        const sendBtn = document.getElementById("chatbot-send");
+        const input = document.getElementById("chatbot-input");
+        const messages = document.getElementById("chatbot-messages");
+
+        btn.onclick = () => {
+            windowBox.style.display = (windowBox.style.display === "flex") ? "none" : "flex";
+        };
+
+        function addMessage(sender, text) {
+            const div = document.createElement("div");
+            div.textContent = sender + ": " + text;
+            div.style.margin = "5px 0";
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        sendBtn.onclick = async () => {
+            const question = input.value.trim();
+            if (!question) return;
+            addMessage("You", question);
+            input.value = "";
+
+            // Send to backend API
+            const response = await fetch("/chatbot/query?question=" + encodeURIComponent(question));
+            const answer = await response.text();
+            addMessage("AI", answer);
+        };
+
+
+        // // Budget vs Actual Chart
+        // const budgetCtx = document.getElementById('budgetChart').getContext('2d');
+        // new Chart(budgetCtx, {
+        //     type: 'bar',
+        //     data: {
+        //         labels: ['Food', 'Housing', 'Transport', 'Utilities', 'Entertainment'],
+        //         datasets: [{
+        //             label: 'Budget',
+        //             data: [500, 1200, 350, 250, 400],
+        //             backgroundColor: 'rgba(102, 126, 234, 0.7)',
+        //             borderColor: '#667eea',
+        //             borderWidth: 1
+        //         }, {
+        //             label: 'Actual',
+        //             data: [450, 1200, 300, 200, 350],
+        //             backgroundColor: 'rgba(118, 75, 162, 0.7)',
+        //             borderColor: '#764ba2',
+        //             borderWidth: 1
+        //         }]
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         maintainAspectRatio: false,
+        //         plugins: {
+        //             legend: {
+        //                 position: 'top',
+        //             }
+        //         },
+        //         scales: {
+        //             y: {
+        //                 beginAtZero: true,
+        //                 ticks: {
+        //                     callback: function (value) {
+        //                         return '$' + value.toLocaleString();
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // });
+
+        // Savings Growth Chart
+        const savingsCtx = document.getElementById('savingsChart').getContext('2d');
+        new Chart(savingsCtx, {
+            type: 'line',
+            data: {
+                labels: Object.keys(monthlySavings),
+                datasets: [{
+                    label: 'Total Savings',
+                    data: Object.values(monthlySavings),
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3
+                }]
+            }
+        });
+
+
+        // Navigation functionality
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+
+</html>
